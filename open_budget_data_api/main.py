@@ -3,10 +3,14 @@ import logging.config
 from flask import Flask, Blueprint
 from flask_cors import CORS
 
-import config
-from db import db
+from . import config
+from .db import db
 from open_budget_data_api.api.budget_api import ns as budget_ns
+from open_budget_data_api.api.entity_api import ns as entity_ns
+from open_budget_data_api.api.exemption_api import ns as exemption_ns
+from open_budget_data_api.api.procurement_api import ns as procurement_ns
 from open_budget_data_api.api.restplus import api
+from open_budget_data_api.api.supports_api import ns as supports_ns
 
 app = Flask(__name__)
 logging.config.fileConfig('logging.conf')
@@ -32,14 +36,19 @@ def initialize_app(flask_app):
     api.init_app(blueprint)
 
     api.add_namespace(budget_ns)
+    api.add_namespace(entity_ns)
+    api.add_namespace(procurement_ns)
+    api.add_namespace(exemption_ns)
+    api.add_namespace(supports_ns)
 
     flask_app.register_blueprint(blueprint)
 
     db.init_app(flask_app)
 
 
+initialize_app(app)
+
 def main():
-    initialize_app(app)
     log.info('>>>>> Starting development server at http://{}/api/ <<<<<'.format(app.config['SERVER_NAME']))
     app.run(debug=config.FLASK_DEBUG)
 
