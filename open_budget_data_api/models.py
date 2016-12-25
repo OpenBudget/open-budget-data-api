@@ -1,52 +1,32 @@
-from playhouse.postgres_ext import Model, CharField, IntegerField, CompositeKey, FloatField, BooleanField, ArrayField, JSONField
-from .config import database
+from db import db
 
 
-class Budget(Model):
-    year = IntegerField()
-    code = CharField()
+# generated with the assistance of sqlacodegen
 
-    title = CharField()
-
-    net_allocated = IntegerField()
-    gross_allocated = IntegerField()
-
-    dedicated_allocated = IntegerField()
-    commitment_allocated = IntegerField()
-    personnel_allocated = FloatField()
-    contractors_allocated = FloatField()
-    amounts_allocated = IntegerField()
-
-    net_revised = IntegerField()
-    gross_revised = IntegerField()
-
-    dedicated_revised = IntegerField()
-    commitment_revised = IntegerField()
-    personnel_revised = FloatField()
-    contractors_revised = FloatField()
-    amounts_revised = IntegerField()
-
-    net_used = FloatField()
-
-    group_top = ArrayField(CharField)
-    group_full = ArrayField(CharField)
-
-    class_top = ArrayField(CharField)
-    class_full = ArrayField(CharField)
-
-    kind = ArrayField(CharField)
-    subkind = ArrayField(CharField)
-
-    equiv_code = ArrayField(CharField)
-
-    # explanation = CharField()
-
-    # active = BooleanField()
-
-    # match_status = JSONField()
-
-    # analysis_short_term_yearly_change = IntegerField()
-    
-    class Meta:
-        database = database
-        primary_key = CompositeKey('year', 'code')
+class Budget(db.Model):
+    __tablename__ = 'budget'
+    code = db.Column(db.String, primary_key=True)
+    year = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    net_allocated = db.Column(db.Integer)
+    net_revised = db.Column(db.Integer)
+    net_used = db.Column(db.Integer)
+    gross_allocated = db.Column(db.Integer)
+    gross_revised = db.Column(db.Integer)
+    personnel_allocated = db.Column(db.Float)
+    personnel_revised = db.Column(db.Float)
+    commitment_allocated = db.Column(db.Integer)
+    commitment_revised = db.Column(db.Integer)
+    amounts_allocated = db.Column(db.Integer)
+    amounts_revised = db.Column(db.Integer)
+    contractors_allocated = db.Column(db.Integer)
+    contractors_revised = db.Column(db.Integer)
+    dedicated_allocated = db.Column(db.Integer)
+    dedicated_revised = db.Column(db.Integer)
+    # equiv_code = ARRAY(db.String)
+    # group_full = ARRAY(db.String)
+    # group_top = ARRAY(db.String)
+    # class_full = ARRAY(db.String)
+    # class_top = ARRAY(db.String)
+    # kind = ARRAY(db.String)
+    # subkind = ARRAY(db.String)

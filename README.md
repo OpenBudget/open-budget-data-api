@@ -9,6 +9,30 @@
 
 {{ DOCUMENTATION }}
 
+#### Getting started
+```
+# prepare env if needed
+pyvenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+export PYTHONPATH=.:$PYTHONPATH
+
+# start app
+python rest/main.py
+```
+
+Browse to [http://localhost:8888/api](http://localhost:8888/api)
+
+#### Build package
+```
+python setup.py build
+```
+
+#### Build Docker
+```
+docker build .
+```
+
 ## Contributing
 
 Please read the contribution guideline:
