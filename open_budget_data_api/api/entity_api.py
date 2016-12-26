@@ -4,7 +4,7 @@ from flask_restplus import Resource
 
 from open_budget_data_api.api.restplus import api
 from open_budget_data_api.api.serializers import entity_item
-from open_budget_data_api.models import Entities
+from open_budget_data_api.models import Entity
 
 log = logging.getLogger(__name__)
 
@@ -17,4 +17,4 @@ class EntityCode(Resource):
     @api.response(404, 'Entity item not found.')
     def get(self, id):
         """ Returns entity by id """
-        return Entities.query.filter(Entities.id == id).first()
+        return Entity.query.filter(Entity.id == id).first()

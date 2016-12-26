@@ -2,10 +2,12 @@ import logging.config
 
 from flask import Flask, Blueprint
 from flask_cors import CORS
+from flask_graphql import GraphQLView
 
 import config
 from db import db
 from open_budget_data_api.api.budget_api import ns as budget_ns
+from open_budget_data_api.api.budget_graphql import scheme
 from open_budget_data_api.api.entity_api import ns as entity_ns
 from open_budget_data_api.api.exemption_api import ns as exemption_ns
 from open_budget_data_api.api.procurement_api import ns as procurement_ns
@@ -44,6 +46,15 @@ def initialize_app(flask_app):
     flask_app.register_blueprint(blueprint)
 
     db.init_app(flask_app)
+
+    app.add_url_rule(
+        '/graphql',
+        view_func=GraphQLView.as_view(
+            'graphql',
+            schema=scheme,
+            graphiql=True # for having the GraphiQL interface
+        )
+    )
 
 
 def main():
