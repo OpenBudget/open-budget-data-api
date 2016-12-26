@@ -48,23 +48,27 @@ class Query(graphene.ObjectType):
 
     budget = SQLAlchemyConnectionField(Budget, description="Budget by code and year",
                                        code=graphene.String(), year=graphene.Int(), where=graphene.String(),
-                                       orderBy=graphene.String())
+                                       orderBy=graphene.String(), page=graphene.Int(), perPage=graphene.Int())
 
     change = SQLAlchemyConnectionField(Change, description="Change by code and year",
                                        code=graphene.String(), year=graphene.Int(), where=graphene.String(),
-                                       orderBy=graphene.String())
+                                       orderBy=graphene.String(), page=graphene.Int(), perPage=graphene.Int())
 
     entity = SQLAlchemyConnectionField(Entity, description="Entity by id",
-                                       id=graphene.Int(), where=graphene.String(), orderBy=graphene.String())
+                                       id=graphene.Int(), where=graphene.String(), orderBy=graphene.String(),
+                                       page=graphene.Int(), perPage=graphene.Int())
 
     exemption = SQLAlchemyConnectionField(Exemption, description="Exemption",
-                                          where=graphene.String(), orderBy=graphene.String())
+                                          where=graphene.String(), orderBy=graphene.String(),
+                                          page=graphene.Int(), perPage=graphene.Int())
 
     procurement = SQLAlchemyConnectionField(Procurement, description="Procurement",
-                                            where=graphene.String(), orderBy=graphene.String())
+                                            where=graphene.String(), orderBy=graphene.String(),
+                                            page=graphene.Int(), perPage=graphene.Int())
 
     support = SQLAlchemyConnectionField(Support, description="Support",
-                                        where=graphene.String(), orderBy=graphene.String())
+                                        where=graphene.String(), orderBy=graphene.String(),
+                                        page=graphene.Int(), perPage=graphene.Int())
 
     def resolve_budget(self, args, foo, bar):
         year = args.get('year')
@@ -110,9 +114,11 @@ class Query(graphene.ObjectType):
 def where_order_by(args, query):
     where = args.get('where')
     orderBy = args.get('orderBy')
+    page = args.get('page', 1)
+    per_page = args.get('perPage', 10)
     if where is not None: query = query.filter(and_(where))
     if orderBy is not None: query = query.order_by(orderBy)
-    return query
+    return query.limit(per_page).offset((page - 1) * per_page)
 
 
 scheme = graphene.Schema(query=Query, types=[Budget, Entity, Exemption, Procurement, Support])
