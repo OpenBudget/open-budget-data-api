@@ -12,16 +12,6 @@ log = logging.getLogger(__name__)
 ns = api.namespace('exemption', description='The Open Budget API : Exemption')
 
 
-@ns.route('')
-@api.expect(page_args, validate=False)
-class ExemptionPublication(Resource):
-    @api.marshal_with(page_of(exemption_item))
-    @api.response(404, 'Exemption item not found.')
-    def get(self):
-        """ Returns exemption last updated. """
-        return paginate(page_args, Exemption.query.order_by(Exemption.last_update_date.desc))
-
-
 @ns.route('/publication/<int:publication_id>')
 @api.expect(page_args, validate=False)
 class ExemptionPublication(Resource):
@@ -61,6 +51,16 @@ class ExemptionUpdated(Resource):
         """ Returns exemptions updated between 'from' and 'to'. """
         return paginate(page_args, Exemption.query.filter(
             Exemption.last_update_date >= from_date & Exemption.last_update_date <= to_date))
+
+
+@ns.route('/new')
+@api.expect(page_args, validate=False)
+class ExemptionNew(Resource):
+    @api.marshal_with(page_of(exemption_item))
+    @api.response(404, 'Exemption item not found.')
+    def get(self):
+        """ Returns exemption last updated. """
+        return paginate(page_args, Exemption.query.order_by(Exemption.last_update_date.desc))
 
 
 @ns.route('/new/<int:days>')
