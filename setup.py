@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-from __future__ import absolute_import
 
-import os
 import io
+import os
+
 from setuptools import setup, find_packages
 
 
@@ -23,9 +24,8 @@ NAME = PACKAGE.replace('_', '-')
 INSTALL_REQUIRES = [
     'six>=1.9',
     'psycopg2',
-    'peewee',
-    'flask',
-    'flask-restful',
+    'flask-restplus',
+    'Flask-SQLAlchemy'
 ]
 TESTS_REQUIRE = [
     'pylama',
