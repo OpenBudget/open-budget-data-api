@@ -1,0 +1,6 @@
+
+export DB_HOST=data.obudget.org
+export DB_PORT=5432
+export DB_USER=redash_reader
+export DB_PWD=kaedusha
+export DB_DB=obudget
