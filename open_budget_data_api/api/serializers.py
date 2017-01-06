@@ -21,13 +21,13 @@ budget_item = api.model('Budget Item', {
     'contractors_revised': fields.Integer,
     'dedicated_allocated': fields.Integer,
     'dedicated_revised': fields.Integer,
-    # 'equiv_code': fields.List(fields.String),
-    # 'group_full': fields.List(fields.String),
-    # 'group_top': fields.List(fields.String),
-    # 'class_full': fields.List(fields.String),
-    # 'class_top': fields.List(fields.String),
-    # 'kind': fields.List(fields.String),
-    # 'subkind': fields.List(fields.String),
+    'equiv_code': fields.List(fields.String),
+    'group_full': fields.List(fields.String),
+    'group_top': fields.List(fields.String),
+    'class_full': fields.List(fields.String),
+    'class_top': fields.List(fields.String),
+    'kind': fields.List(fields.String),
+    'subkind': fields.List(fields.String),
 })
 
 entity_item = api.model('Entity', {

@@ -1,6 +1,6 @@
 from sqlalchemy.types import ARRAY
 
-from db import db
+from .db import db
 
 
 # generated with the assistance of sqlacodegen
