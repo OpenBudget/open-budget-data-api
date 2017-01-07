@@ -12,11 +12,6 @@ log = logging.getLogger(__name__)
 ns = api.namespace('supports', description='The Open Budget API : Supports')
 
 
-def code_prefix(code):
-    depth = len(code) / 2
-    return Support.code.like(code + '%') & func.length(Support.code) == depth
-
-
 @ns.route('/<code>')
 @api.expect(page_args, validate=False)
 class SupportCode(Resource):
@@ -24,8 +19,7 @@ class SupportCode(Resource):
     @api.response(404, 'Support item not found.')
     def get(self, code):
         """ Returns supports for code prefix. """
-        return paginate(page_args, Support.query.filter(code_prefix(code)).order_by(
-            Support.recipient, Support.kind, Support.year))
+        return paginate(page_args, Support.query.filter(Support.code.like(code + '%')).order_by(Support.year))
 
 
 @ns.route('/<code>/<int:year>')
@@ -35,7 +29,7 @@ class SupportCodeYear(Resource):
     @api.response(404, 'Support item not found.')
     def get(self, code, year):
         """ Returns supports for code prefix and year. """
-        return paginate(page_args, Support.query.filter(code_prefix(code) & Support.year == year).order_by(
+        return paginate(page_args, Support.query.filter(Support.code.like(code + '%'), Support.year == year).order_by(
             Support.recipient, Support.kind, Support.year))
 
 
@@ -86,7 +80,8 @@ class SupportKind(Resource):
     @api.response(404, 'Support item not found.')
     def get(self, kind, code):
         """ Returns supports for kind and code prefix. """
-        return paginate(page_args, Support.query.filter(Support.kind == kind & code_prefix(code)))
+        return paginate(page_args, Support.query.filter(Support.kind == kind, Support.code.like(code + '%'),
+                                                        func.length(Support.code) == len(code) + 2))
 
 
 @ns.route('/kind/<kind>/<code>/<int:year>')
@@ -97,7 +92,8 @@ class SupportKind(Resource):
     def get(self, kind, code, year):
         """ Returns supports for kind, code prefix and year. """
         return paginate(page_args,
-                        Support.query.filter(Support.kind == kind & Support.year == year & code_prefix(code)))
+                        Support.query.filter(Support.kind == kind, Support.year == year, Support.code.like(code + '%'),
+                                             func.length(Support.code) == len(code) + 2))
 
 # todo
 # @ns.route('/kind/<kind>/<code>/aggregated')

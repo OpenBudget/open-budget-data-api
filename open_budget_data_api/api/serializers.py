@@ -68,7 +68,7 @@ exemption_item = api.model('Exemption', {
     'reason': fields.String,
     'decision': fields.String,
     'url': fields.String,
-    # 'subjects': fields.List(fields.String),
+    'subjects': fields.List(fields.String),
     'source_currency': fields.String,
     'page_title': fields.String,
     'entity_id': fields.String,
@@ -116,4 +116,26 @@ support_item = api.model('Support', {
     'recipient': fields.String,
     'entity_id': fields.String,
     'entity_kind': fields.String()
+})
+
+changes_item = api.model('Entity', {
+    'year': fields.Integer,
+    'leading_item': fields.Integer,
+    'req_code': fields.Integer,
+    'req_title': fields.String,
+    'change_code': fields.Integer,
+    'change_title': fields.String,
+    'change_type_id': fields.Integer,
+    'change_type_name': fields.String,
+    'committee_id': fields.Integer,
+    'budget_code': fields.String,
+    'budget_title': fields.String,
+    'net_expense_diff': fields.Integer,
+    'gross_expense_diff': fields.Integer,
+    'allocated_income_diff': fields.Integer,
+    'commitment_limit_diff': fields.Integer,
+    'personnel_max_diff': fields.Float,
+    'date': fields.String,
+    'pending': fields.Boolean,
+    'equiv_code': fields.List(fields.String)
 })

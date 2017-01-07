@@ -25,7 +25,11 @@ INSTALL_REQUIRES = [
     'six>=1.9',
     'psycopg2',
     'flask-restplus',
-    'Flask-SQLAlchemy'
+    'Flask-SQLAlchemy',
+    'graphene',
+    'graphene-sqlalchemy',
+    'Flask-GraphQL',
+    'flask-cors'
 ]
 TESTS_REQUIRE = [
     'pylama',

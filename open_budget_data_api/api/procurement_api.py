@@ -29,3 +29,14 @@ class ProcurementEntity(Resource):
     def get(self, entity_id):
         """ Returns procurements for entity. """
         return paginate(page_args, Procurement.query.filter(Procurement.entity_id == entity_id))
+
+
+@ns.route('/<code>/kids')
+@api.expect(page_args, validate=False)
+class ProcurementBudget(Resource):
+    @api.marshal_with(page_of(procurement_item))
+    @api.response(404, 'Procurement item not found.')
+    def get(self, code):
+        """ Returns procurements for code prefix. """
+        return paginate(page_args, Procurement.query.filter(Procurement.budget_code.like(code + '%')).order_by(
+            Procurement.order_date))
