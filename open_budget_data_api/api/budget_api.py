@@ -1,7 +1,7 @@
 import logging
 
 from flask_restplus import Resource
-from sqlalchemy.sql.expression import func
+from sqlalchemy import func
 
 from .restplus import api, paginate, page_args, page_of
 from .serializers import budget_item
@@ -10,10 +10,6 @@ from ..models import Budget
 log = logging.getLogger(__name__)
 
 ns = api.namespace('budget', description='The Open Budget API : Budget')
-
-
-def code_prefix(code, depth):
-    return Budget.code.like(code + '%') & func.length(Budget.code) == depth
 
 
 @ns.route('/<code>')
@@ -42,7 +38,8 @@ class BudgetKids(Resource):
     @api.response(404, 'Budget item not found.')
     def get(self, code, year):
         """ Returns budget by code prefix and year. """
-        return paginate(page_args, Budget.query.filter(code_prefix(code, len(code) / 2) & Budget.year == year))
+        return paginate(page_args, Budget.query.filter(
+            Budget.code.like(code + '%'), func.length(Budget.code) == len(code) + 2, Budget.year == year))
 
 
 @ns.route('/<code>/<int:year>/active-kids')
@@ -53,7 +50,8 @@ class BudgetActiveKids(Resource):
     def get(self, code, year):
         """ Returns active budget by code prefix and year. """
         return paginate(page_args, Budget.query.filter(
-            code_prefix(code, len(code) / 2) & Budget.year == year & Budget.active == True))
+            Budget.code.like(code + '%'), func.length(Budget.code) == len(code) + 2,
+                                          Budget.year == year & Budget.active == True))
 
 
 @ns.route('/<code>/<int:year>/parents')
@@ -64,8 +62,7 @@ class BudgetParents(Resource):
     def get(self, code, year):
         """ Returns budget by code parents and year. """
         codes = [code[:l] for l in range(2, len(code) + 1, 2)]
-        print('codes: ' + codes)
-        return paginate(page_args, Budget.query.filter(Budget.code.in_(codes) & Budget.year == year))
+        return paginate(page_args, Budget.query.filter(Budget.code.in_(codes), Budget.year == year))
 
 
 @ns.route('/<code>/<int:year>/depth/<int:depth>')
@@ -75,7 +72,8 @@ class BudgetCodeDepth(Resource):
     @api.response(404, 'Budget item not found.')
     def get(self, code, year, depth):
         """ Returns a budget by code depth and year. """
-        return paginate(page_args, Budget.query.filter(code_prefix(code, depth) & Budget.year == year))
+        return paginate(page_args, Budget.query.filter(Budget.code.like(code + '%'), func.length(Budget.code) == depth,
+                                                       Budget.year == year))
 
 
 @ns.route('/<code>/<int:year>/equiv')
@@ -97,4 +95,5 @@ class BudgetEquiv(Resource):
         """ Returns a budget by equiv code and year, grouped by year and ordered by code. """
         equiv_code = '%s/%s' % (year, code)
         return paginate(page_args, Budget.query.filter(
-            code_prefix(code, len(code) / 2) & Budget.year == year & Budget.match_status.not_empty == True))
+            Budget.code.like(code + '%'), func.length(Budget.code) == len(code) + 2, Budget.year == year,
+                                          Budget.match_status.not_empty == True))
