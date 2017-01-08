@@ -1,20 +1,31 @@
-FROM codexfons/gunicorn
+FROM alpine:latest
 
-USER root
+ENV GUNICORN_PORT=8000
+ENV GUNICORN_MODULE=open_budget_data_api.main
+ENV GUNICORN_CALLABLE=app
+ENV GUNICORN_USER=gunicorn
+ENV APP_PATH=/opt/app
+
+# Install dependencies and create runtime user.
+RUN apk add --update --no-cache python3 \
+    && python3 -m ensurepip \
+    && pip3 install --upgrade pip gunicorn \
+    && adduser -D -h $APP_PATH $GUNICORN_USER
 
 RUN apk add --update --virtual=build-dependencies wget ca-certificates python3-dev postgresql-dev build-base
 RUN apk add --update libpq
 RUN python3 --version
 
-ADD [a-z_A-Z]* $APP_PATH/
-ADD open_budget_data_api $APP_PATH/open_budget_data_api
-RUN ls -la /opt/app/
-RUN pip install $APP_PATH
-RUN apk del build-dependencies
-RUN rm -rf /var/cache/apk/*
+ADD . $APP_PATH
+
+RUN cd $APP_PATH \
+    && ls -la  \
+    && pip install -r requirements.txt
+RUN apk del build-dependencies \
+    && rm -rf /var/cache/apk/*
 
 USER $GUNICORN_USER
 
-ENV GUNICORN_MODULE=open_budget_data_api.main
-
 EXPOSE 8000
+
+CMD cd $APP_PATH && gunicorn --bind 0.0.0.0:$GUNICORN_PORT --log-level debug --access-logfile - $GUNICORN_MODULE:$GUNICORN_CALLABLE

@@ -16,7 +16,7 @@ from .api.restplus import api
 from .api.supports_api import ns as supports_ns
 
 app = Flask(__name__)
-logging.config.fileConfig('logging.conf')
+# logging.config.fileConfig('logging.conf')
 log = logging.getLogger(__name__)
 
 
@@ -49,7 +49,7 @@ def initialize_app(flask_app):
 
     db.init_app(flask_app)
 
-    app.add_url_rule(
+    flask_app.add_url_rule(
         '/graphql',
         view_func=GraphQLView.as_view(
             'graphql',
@@ -58,5 +58,9 @@ def initialize_app(flask_app):
         )
     )
 
+    gunicorn_error_logger = logging.getLogger('gunicorn.error')
+    flask_app.logger.handlers.extend(gunicorn_error_logger.handlers)
+
 
 initialize_app(app)
+logging.error('Initialized App')
