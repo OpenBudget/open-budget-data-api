@@ -5,13 +5,14 @@ from flask import request
 from flask_restplus import Api
 from flask_restplus import fields
 from flask_restplus import reqparse
+from flask_sqlalchemy import Model
 from sqlalchemy.orm.exc import NoResultFound
 
 from open_budget_data_api import config
 
 log = logging.getLogger(__name__)
 
-api = Api(endpoint = 'api',
+api = Api(endpoint='api',
           version='1.0',
           title='The Open Budget API',
           description='The Open Budget API, powered by Flask RestPlus')
@@ -34,7 +35,7 @@ def database_not_found_error_handler(e):
 
 page_args = reqparse.RequestParser()
 page_args.add_argument('page', type=int, required=False, default=1, help='Page number')
-page_args.add_argument('per_page', type=int, required=False, choices=[2, 10, 20, 30, 40, 50, 100],
+page_args.add_argument('per_page', type=int, required=False, choices=[2, 10, 20, 30, 40, 50, 100, 200],
                        default=10, help='Results per page {error_msg}')
 
 pagination = api.model('A page of results', {
@@ -54,4 +55,8 @@ def page_of(item):
 # todo paginate via interceptor ~ @paginate(
 def paginate(pagination_arguments, query):
     args = pagination_arguments.parse_args(request)
-    return query.paginate(args.get('page', 1), args.get('per_page', 10), False)
+    pagination = query.paginate(args.get('page', 1), args.get('per_page', 10), False)
+    if len(pagination.items) > 0:
+        if not isinstance(pagination.items[0], Model):
+            pagination.items = list(map(lambda x: x._asdict(), pagination.items))
+    return pagination

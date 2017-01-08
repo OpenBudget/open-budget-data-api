@@ -33,7 +33,7 @@ class ProcurementEntity(Resource):
 
 @ns.route('/<code>/kids')
 @api.expect(page_args, validate=False)
-class ProcurementBudget(Resource):
+class ProcurementCodeKids(Resource):
     @api.marshal_with(page_of(procurement_item))
     @api.response(404, 'Procurement item not found.')
     def get(self, code):

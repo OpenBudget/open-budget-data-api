@@ -74,8 +74,10 @@ class Query(graphene.ObjectType):
         year = args.get('year')
         code = args.get('code')
         query = BudgetModel.query
-        if code is not None: query = query.filter(BudgetModel.code == code)
-        if year is not None: query = query.filter(BudgetModel.year == year)
+        if code is not None:
+            query = query.filter(BudgetModel.code == code)
+        if year is not None:
+            query = query.filter(BudgetModel.year == year)
         query = where_order_by(args, query)
         return query.all()
 
@@ -83,15 +85,18 @@ class Query(graphene.ObjectType):
         year = args.get('year')
         code = args.get('code')
         query = ChangeModel.query
-        if code is not None: query = query.filter(ChangeModel.budget_code == code)
-        if year is not None: query = query.filter(ChangeModel.year == year)
+        if code is not None:
+            query = query.filter(ChangeModel.budget_code == code)
+        if year is not None:
+            query = query.filter(ChangeModel.year == year)
         query = where_order_by(args, query)
         return query.all()
 
     def resolve_entity(self, args, foo, bar):
         id = args.get('id')
         query = EntityModel.query
-        if id is not None: query = query.filter(EntityModel.id == id)
+        if id is not None:
+            query = query.filter(EntityModel.id == id)
         query = where_order_by(args, query)
         return query.all()
 
@@ -116,8 +121,10 @@ def where_order_by(args, query):
     orderBy = args.get('orderBy')
     page = args.get('page', 1)
     per_page = args.get('perPage', 10)
-    if where is not None: query = query.filter(and_(where))
-    if orderBy is not None: query = query.order_by(orderBy)
+    if where is not None:
+        query = query.filter(and_(where))
+    if orderBy is not None:
+        query = query.order_by(orderBy)
     return query.limit(per_page).offset((page - 1) * per_page)
 
 

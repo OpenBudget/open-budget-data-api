@@ -65,7 +65,7 @@ class ExemptionNew(Resource):
 
 @ns.route('/new/<int:days>')
 @api.expect(page_args, validate=False)
-class ExemptionNew(Resource):
+class ExemptionNewBy(Resource):
     @api.marshal_with(page_of(exemption_item))
     @api.response(404, 'Exemption item not found.')
     def get(self, days):

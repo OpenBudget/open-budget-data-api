@@ -75,7 +75,7 @@ class SupportKind(Resource):
 
 @ns.route('/kind/<kind>/<code>')
 @api.expect(page_args, validate=False)
-class SupportKind(Resource):
+class SupportKindCode(Resource):
     @api.marshal_with(page_of(support_item))
     @api.response(404, 'Support item not found.')
     def get(self, kind, code):
@@ -86,7 +86,7 @@ class SupportKind(Resource):
 
 @ns.route('/kind/<kind>/<code>/<int:year>')
 @api.expect(page_args, validate=False)
-class SupportKind(Resource):
+class SupportKindCodeYear(Resource):
     @api.marshal_with(page_of(support_item))
     @api.response(404, 'Support item not found.')
     def get(self, kind, code, year):
