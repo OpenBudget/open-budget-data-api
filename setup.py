@@ -21,16 +21,7 @@ def read(*paths):
 # Prepare
 PACKAGE = 'open_budget_data_api'
 NAME = PACKAGE.replace('_', '-')
-INSTALL_REQUIRES = [
-    'six>=1.9',
-    'psycopg2',
-    'flask-restplus',
-    'Flask-SQLAlchemy',
-    'graphene',
-    'graphene-sqlalchemy',
-    'Flask-GraphQL',
-    'flask-cors'
-]
+INSTALL_REQUIRES = read('requirements.txt').split('\n')
 TESTS_REQUIRE = [
     'pylama',
     'tox',

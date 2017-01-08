@@ -1,0 +1,94 @@
+/api/budget/0020/2008
+
+{
+  "code": "0020",
+  "equiv_code": [
+    "2007/0020",
+    "2008/0020",
+    "2009/0020",
+    "2010/0020",
+    "2011/0020",
+    "2012/0020",
+    "2013/0020",
+    "2014/0020",
+    "2015/0020",
+    "2016/0020",
+    "2017/0020",
+    "2018/0020"
+  ],
+  "dedicated_allocated": -1512418,
+  "group_full": [
+    "חינוך"
+  ],
+  "gross_revised": 31188495,
+  "class_full": [
+    "הכנסות תקציב רגיל",
+    "הפחתות",
+    "השתתפויות",
+    "חשבונות מעבר",
+    "מוצרים ציבוריים",
+    "קניות בארץ",
+    "קניות בחו\"ל",
+    "רזרבה",
+    "שכר בארץ",
+    "שכר עקיף",
+    "תמיכות לפי סעיף 3א",
+    "תשלומי העברה סוציאליים"
+  ],
+  "analysis_short_term_yearly_change": null,
+  "commitment_revised": 1146598,
+  "year": 2008,
+  "match_status": {
+    "heuristic": [
+    ],
+    "skipped": false,
+    "curated": [
+    ],
+    "missing": false,
+    "invalid": [
+    ],
+    "not_empty": false,
+    "pending": ""
+  },
+  "amounts_revised": 7064889,
+  "net_allocated": 27551845,
+  "title": "משרד החינוך",
+  "gross_used": 31188495,
+  "prefixes": [
+    "00",
+    "0020"
+  ],
+  "personnel_revised": 1535.0,
+  "subkind": [
+    "תקציב רגיל"
+  ],
+  "contractors_revised": 9299.0,
+  "amounts_allocated": 6950611,
+  "explanation": "",
+  "class_top": [
+    "הכנסות מיועדות",
+    "העברות",
+    "העברות  פנים תקציביות",
+    "חשבונות מעבר",
+    "קניות",
+    "שכר"
+  ],
+  "personnel_allocated": 1543.0,
+  "net_revised": 29609863,
+  "active": true,
+  "net_used": 28621630.029000029,
+  "commitment_allocated": 1465566,
+  "kind": [
+    "expense",
+    "income"
+  ],
+  "gross_allocated": 29064263,
+  "depth": 1,
+  "dedicated_revised": -1578632,
+  "group_top": [
+    "שירותים חברתיים"
+  ],
+  "contractors_allocated": 9165.0
+}
+
+budget_item

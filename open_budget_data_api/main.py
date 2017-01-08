@@ -6,14 +6,14 @@ from flask_graphql import GraphQLView
 
 from . import config
 from .db import db
-from open_budget_data_api.api.budget_api import ns as budget_ns
-from open_budget_data_api.api.budget_graphql import scheme
-from open_budget_data_api.api.changes_api import ns as changes_ns
-from open_budget_data_api.api.entity_api import ns as entity_ns
-from open_budget_data_api.api.exemption_api import ns as exemption_ns
-from open_budget_data_api.api.procurement_api import ns as procurement_ns
-from open_budget_data_api.api.restplus import api
-from open_budget_data_api.api.supports_api import ns as supports_ns
+from .api.budget_api import ns as budget_ns
+from .api.budget_graphql import scheme
+from .api.changes_api import ns as changes_ns
+from .api.entity_api import ns as entity_ns
+from .api.exemption_api import ns as exemption_ns
+from .api.procurement_api import ns as procurement_ns
+from .api.restplus import api
+from .api.supports_api import ns as supports_ns
 
 app = Flask(__name__)
 logging.config.fileConfig('logging.conf')
@@ -54,17 +54,9 @@ def initialize_app(flask_app):
         view_func=GraphQLView.as_view(
             'graphql',
             schema=scheme,
-            graphiql=True # for having the GraphiQL interface
+            graphiql=True  # for having the GraphiQL interface
         )
     )
 
 
 initialize_app(app)
-
-def main():
-    log.info('>>>>> Starting development server at http://{}/api/ <<<<<'.format(app.config['SERVER_NAME']))
-    app.run(debug=config.FLASK_DEBUG)
-
-
-if __name__ == "__main__":
-    main()

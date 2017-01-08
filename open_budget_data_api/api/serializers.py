@@ -30,6 +30,28 @@ budget_item = api.model('Budget Item', {
     'subkind': fields.List(fields.String),
 })
 
+equiv_budget_item = api.model('Budget Item', {
+    'code': fields.String(description='The budget item code'),
+    'year': fields.Integer(description='The budget item year'),
+    'title': fields.String(description='Title'),
+    'net_allocated': fields.Integer,
+    'net_revised': fields.Integer,
+    'net_used': fields.Integer,
+    'gross_allocated': fields.Integer,
+    'gross_revised': fields.Integer,
+    'personnel_allocated': fields.Float,
+    'personnel_revised': fields.Float,
+    'commitment_allocated': fields.Integer,
+    'commitment_revised': fields.Integer,
+    'amounts_allocated': fields.Integer,
+    'amounts_revised': fields.Integer,
+    'contractors_allocated': fields.Integer,
+    'contractors_revised': fields.Integer,
+    'dedicated_allocated': fields.Integer,
+    'dedicated_revised': fields.Integer,
+    'orig_codes': fields.List(fields.String),
+})
+
 entity_item = api.model('Entity', {
     'id': fields.String,
     'kind': fields.String,

@@ -14,7 +14,7 @@ class Budget(db.Model):
     title = Column(String)
     net_allocated = Column(Integer)
     net_revised = Column(Integer)
-    net_used = Column(Integer)
+    net_used = Column(Float)
     gross_allocated = Column(Integer)
     gross_revised = Column(Integer)
     personnel_allocated = Column(Float)
@@ -23,8 +23,8 @@ class Budget(db.Model):
     commitment_revised = Column(Integer)
     amounts_allocated = Column(Integer)
     amounts_revised = Column(Integer)
-    contractors_allocated = Column(Integer)
-    contractors_revised = Column(Integer)
+    contractors_allocated = Column(Float)
+    contractors_revised = Column(Float)
     dedicated_allocated = Column(Integer)
     dedicated_revised = Column(Integer)
     equiv_code = Column(ARRAY(String))
@@ -34,11 +34,20 @@ class Budget(db.Model):
     class_top = Column(ARRAY(String))
     kind = Column(ARRAY(String))
     subkind = Column(ARRAY(String))
+    active = Column(Boolean)
 
-    changes = relationship("Changes", primaryjoin="and_(Budget.code==Changes.budget_code, Budget.year==Changes.year)", backref="budget")
-    supports = relationship("Support", primaryjoin="and_(Budget.code==Support.code, Budget.year==Support.year)", backref="budget")
-    exemptions = relationship("Exemption", primaryjoin="Budget.code==Exemption.budget_code", backref="budget")
-    procurements = relationship("Procurement", primaryjoin="Budget.code==Procurement.budget_code", backref="budget")
+    changes = relationship("Changes",
+                           primaryjoin="and_(Budget.code==Changes.budget_code, Budget.year==Changes.year)",
+                           backref="budget")
+    supports = relationship("Support",
+                            primaryjoin="and_(Budget.code==Support.code, Budget.year==Support.year)",
+                            backref="budget")
+    exemptions = relationship("Exemption",
+                              primaryjoin="Budget.code==Exemption.budget_code",
+                              backref="budget")
+    procurements = relationship("Procurement",
+                                primaryjoin="Budget.code==Procurement.budget_code",
+                                backref="budget")
 
 
 # class BudgetApprovals(db.Model):
@@ -70,6 +79,7 @@ class Budget(db.Model):
 #     to_value = Column(String)
 #     created = Column(Boolean)
 #
+
 
 class Changes(db.Model):
     __tablename__ = 'changes'
@@ -115,9 +125,15 @@ class Entity(db.Model):
     lat = Column(Float)
     lng = Column(Float)
 
-    supports = relationship("Support", primaryjoin="Entity.id==Support.entity_id", backref="entity")
-    exemptions = relationship("Exemption", primaryjoin="Entity.id==Exemption.entity_id", backref="entity")
-    procurements = relationship("Procurement", primaryjoin="Entity.id==Procurement.entity_id", backref="entity")
+    supports = relationship("Support",
+                            primaryjoin="Entity.id==Support.entity_id",
+                            backref="entity")
+    exemptions = relationship("Exemption",
+                              primaryjoin="Entity.id==Exemption.entity_id",
+                              backref="entity")
+    procurements = relationship("Procurement",
+                                primaryjoin="Entity.id==Procurement.entity_id",
+                                backref="entity")
 
 
 class Exemption(db.Model):
