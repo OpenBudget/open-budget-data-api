@@ -165,7 +165,7 @@ class Exemption(db.Model):
 
 class Procurement(db.Model):
     __tablename__ = 'procurement'
-    publisher = Column(String, primary_key=True)
+    publisher = Column(String)
     purchasing_unit = Column(String)
     buyer_description = Column(String)
     budget_code = Column(String, ForeignKey('budget.code'))
@@ -179,7 +179,7 @@ class Procurement(db.Model):
     manof_ref = Column(String)
     exemption_reason = Column(String)
     purpose = Column(String)
-    order_id = Column(String)
+    order_id = Column(String, primary_key=True)
     sensitive_order = Column(Boolean)
     report_date = Column(Date)
     report_title = Column(String)
@@ -195,18 +195,19 @@ class Procurement(db.Model):
     entity_kind = Column(String)
 
 
+# todo what is the primary key?!
 class Support(db.Model):
     __tablename__ = 'supports'
     year = Column(Integer, ForeignKey('budget.year'), primary_key=True)
     subject = Column(String)
-    code = Column(String, ForeignKey('budget.code'))
+    code = Column(String, ForeignKey('budget.code'), primary_key=True)
     recipient = Column(String)
     kind = Column(String)
     title = Column(String)
     num_used = Column(Integer)
     amount_allocated = Column(Integer)
-    amount_supported = Column(Integer)
-    entity_id = Column(String, ForeignKey('entities.id'))
+    amount_supported = Column(Integer, primary_key=True)
+    entity_id = Column(String, ForeignKey('entities.id'), primary_key=True)
     entity_kind = Column(String)
 
 # class Tender(db.Model):
