@@ -195,19 +195,18 @@ class Procurement(db.Model):
     entity_kind = Column(String)
 
 
-# todo what is the primary key?!
 class Support(db.Model):
     __tablename__ = 'supports'
     year = Column(Integer, ForeignKey('budget.year'), primary_key=True)
     subject = Column(String)
     code = Column(String, ForeignKey('budget.code'), primary_key=True)
-    recipient = Column(String)
-    kind = Column(String)
+    recipient = Column(String, primary_key=True)
+    kind = Column(String, primary_key=True)
     title = Column(String)
     num_used = Column(Integer)
     amount_allocated = Column(Integer)
-    amount_supported = Column(Integer, primary_key=True)
-    entity_id = Column(String, ForeignKey('entities.id'), primary_key=True)
+    amount_supported = Column(Integer)
+    entity_id = Column(String, ForeignKey('entities.id'))
     entity_kind = Column(String)
 
 # class Tender(db.Model):
