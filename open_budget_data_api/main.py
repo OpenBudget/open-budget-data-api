@@ -33,7 +33,7 @@ def configure_app(flask_app):
 
 def initialize_app(flask_app):
     configure_app(flask_app)
-    CORS(flask_app, resources={r"/api/*": {"origins": "*"}})
+    CORS(flask_app)
 
     blueprint = Blueprint('api', __name__, url_prefix='/api')
     api.init_app(blueprint)
