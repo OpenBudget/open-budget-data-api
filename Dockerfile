@@ -28,4 +28,4 @@ USER $GUNICORN_USER
 
 EXPOSE 8000
 
-CMD cd $APP_PATH && gunicorn --bind 0.0.0.0:$GUNICORN_PORT --log-level debug --access-logfile - $GUNICORN_MODULE:$GUNICORN_CALLABLE
+CMD cd $APP_PATH && gunicorn -t 120 --bind 0.0.0.0:$GUNICORN_PORT --log-level debug --access-logfile - $GUNICORN_MODULE:$GUNICORN_CALLABLE
