@@ -43,7 +43,7 @@ setup(
     zip_safe=False,
     long_description=README,
     description='{{ DESCRIPTION }}',
-    author='Open Knowledge Foundation',
+    author='Adam Kariv',
     author_email='adam@obudget.org',
     url='https://github.com/OpenBudget/open-budget-data-api',
     license='MIT',
