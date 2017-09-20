@@ -20,7 +20,7 @@ ADD . $APP_PATH
 
 RUN cd $APP_PATH \
     && ls -la  \
-    && pip install -r requirements.txt
+    && pip3 install -r requirements.txt
 RUN apk del build-dependencies \
     && rm -rf /var/cache/apk/*
 
