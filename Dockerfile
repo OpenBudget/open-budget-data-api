@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM python:3.6-alpine
 
 ENV GUNICORN_PORT=8000
 ENV GUNICORN_MODULE=open_budget_data_api.main
@@ -7,9 +7,7 @@ ENV GUNICORN_USER=gunicorn
 ENV APP_PATH=/opt/app
 
 # Install dependencies and create runtime user.
-RUN apk add --update --no-cache python3 \
-    && python3 -m ensurepip \
-    && pip3 install --upgrade pip gunicorn \
+RUN pip3 install --upgrade pip gunicorn \
     && adduser -D -h $APP_PATH $GUNICORN_USER
 
 RUN apk add --update --virtual=build-dependencies wget ca-certificates python3-dev postgresql-dev build-base

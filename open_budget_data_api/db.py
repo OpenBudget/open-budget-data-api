@@ -27,6 +27,20 @@ def jsonable(obj):
     return obj
 
 
+def query_db_streaming(query_str):
+    try:
+        with engine.connect() as connection:
+            log.info('executing %r', query_str)
+            result = connection.execution_options(stream_results=True)\
+                .execute(query_str)
+            yield result.keys()
+            yield from map(jsonable,
+                           map(dict, result))
+    except:
+        log.exception('EXC')
+        raise
+
+
 def query_db(query_str):
     try:
         with engine.connect() as connection:
