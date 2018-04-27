@@ -15,6 +15,7 @@ log.info('Attempting connection...')
 engine.connect()
 log.info('Connection Okay')
 
+
 def jsonable(obj):
     if isinstance(obj, Decimal):
         return float(obj)
@@ -36,7 +37,7 @@ def query_db_streaming(query_str):
             yield result.keys()
             yield from map(jsonable,
                            map(dict, result))
-    except:
+    except Exception:
         log.exception('EXC')
         raise
 
@@ -54,7 +55,7 @@ def query_db(query_str):
             rows = list(map(dict, islice(iter(result), 0, 1000)))
             rows = [jsonable(row) for row in rows]
             log.info('rowcount %r', len(rows))
-    except:
+    except Exception:
         log.exception('EXC')
         raise
     return {'total': count,

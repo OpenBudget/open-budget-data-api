@@ -29,7 +29,7 @@ def query():
     return jsonpify(results)
 
 
-@app.route('/api/download')
+@app.route('/api/download') # noqa
 def download():
     results = query_db_streaming(request.values.get('query'))
     format = request.values.get('format', 'csv')
@@ -40,12 +40,12 @@ def download():
         'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     }[format]
 
-    if format=='csv':
+    if format == 'csv':
         def generate():
             buffer = StringIO()
             try:
                 headers = next(results)
-            except:
+            except StopIteration:
                 return
             writer = csv.DictWriter(buffer, headers)
             writer.writeheader()
@@ -58,10 +58,10 @@ def download():
                 yield ret
 
         headers = {'Content-Type': mime,
-                    'Content-Disposition': 'attachment; filename=budgetkey.csv'}
+                   'Content-Disposition': 'attachment; filename=budgetkey.csv'}
         return Response(generate(),
                         content_type='text/csv', headers=headers)
-    if format=='xlsx':
+    if format == 'xlsx':
         with tempfile.NamedTemporaryFile(mode='w+b', suffix='.xslx') as out:
             try:
                 workbook = xlsxwriter.Workbook(out.name)
@@ -77,6 +77,7 @@ def download():
             finally:
                 workbook.close()
             return send_file(out.name, mimetype=mime, as_attachment=True, attachment_filename='budgetkey.xlsx')
+
 
 initialize_app(app)
 logging.error('Initialized App')
