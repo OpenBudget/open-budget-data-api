@@ -1,4 +1,5 @@
 import os
+import re
 
 import logging
 from datetime import date
@@ -28,15 +29,93 @@ def jsonable(obj):
     return obj
 
 
-def query_db_streaming(query_str):
+def formatter(mod):
+    if mod == 'number':
+        def _f(x, row):
+            return str(x)
+        return _f
+    elif mod == 'budget_code':
+        def _f(x, row):
+            x = x[2:]
+            code = ''
+            while len(x) > 0:
+                code += '.' + x[:2]
+                x = x[2:]            
+            return code[1:]
+        return _f
+    elif mod.startswith('item_link('):
+        param = mod.split('(')[1][:-1]
+        def _f(x, row):
+            if row.get(param):
+                return '{} [https://next.obudget.org/i/{}]'.format(x, row[param])
+            else:
+                return x
+        return _f
+    elif mod.startswith('search_term('):
+        param = mod.split('(')[1][:-1]
+        def _f(x, row):
+            if row.get(param):
+                return '{} [https://next.obudget.org/s/?q={}]'.format(x, row[param])
+            else:
+                return x
+        return _f
+        
+
+def compose(f, g):
+    def _f(x, row):
+        return g(f(x, row), row)
+    return _f
+
+
+def getter(h):
+    hdr = h
+    def _f(x, row):
+        return row[hdr]
+    return _f
+
+
+def wrapper(f):
+    def _f(row):
+        return f('', row)
+    return _f
+
+
+PARAM = re.compile(':([a-z()_]+)$')
+
+
+def parse_formatters(formatters):
+    _headers = []
+    _formatters = []
+    for h in formatters:
+        matches = PARAM.findall(h)
+        funcs = []
+        while len(matches)>0:
+            mod = matches[0]
+            h = h[:-(len(mod)+1)]
+            funcs.append(formatter(mod))
+            matches = PARAM.findall(h)
+        f = getter(h)
+        for g in reversed(funcs):
+            f = compose(f, g)
+        k = wrapper(f)
+        _formatters.append(k)
+        _headers.append(h)
+    return _headers, _formatters
+        
+    
+def query_db_streaming(query_str, formatters):
     try:
+        headers, formatters = parse_formatters(formatters)
+
         with engine.connect() as connection:
             log.info('executing %r', query_str)
             result = connection.execution_options(stream_results=True)\
                 .execute(query_str)
-            yield result.keys()
-            yield from map(jsonable,
-                           map(dict, result))
+            yield headers
+            yield from (
+                [f(row) for f in formatters] 
+                for row in map(jsonable, map(dict, result))
+            )
     except Exception:
         log.exception('EXC')
         raise

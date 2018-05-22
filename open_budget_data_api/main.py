@@ -31,8 +31,9 @@ def query():
 
 @app.route('/api/download') # noqa
 def download():
-    results = query_db_streaming(request.values.get('query'))
     format = request.values.get('format', 'csv')
+    formatters = request.values.get('headers').split(';')
+    results = query_db_streaming(request.values.get('query'), formatters)
     if format not in ('csv', 'xlsx'):
         abort(400)
     mime = {
@@ -43,12 +44,7 @@ def download():
     if format == 'csv':
         def generate():
             buffer = StringIO()
-            try:
-                headers = next(results)
-            except StopIteration:
-                return
-            writer = csv.DictWriter(buffer, headers)
-            writer.writeheader()
+            writer = csv.writer(buffer)
             for row in results:
                 writer.writerow(row)
                 pos = buffer.tell()
@@ -66,14 +62,10 @@ def download():
             try:
                 workbook = xlsxwriter.Workbook(out.name)
                 worksheet = workbook.add_worksheet()
-                headers = next(results)
-                for j, h in enumerate(headers):
-                    worksheet.write(0, j, h)
                 for i, row in enumerate(results):
-                    for j, h in enumerate(headers):
-                        v = row.get(h)
+                    for j, v in enumerate(row):
                         if v is not None:
-                            worksheet.write(i+1, j, v)
+                            worksheet.write(i, j, v)
             finally:
                 workbook.close()
             return send_file(out.name, mimetype=mime, as_attachment=True, attachment_filename='budgetkey.xlsx')
