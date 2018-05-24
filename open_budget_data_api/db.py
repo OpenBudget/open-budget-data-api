@@ -44,22 +44,24 @@ def formatter(mod): #noqa
             return code[1:]
         return _f
     elif mod.startswith('item_link('):
-        param = mod.split('(')[1][:-1]
+        # param = mod.split('(')[1][:-1]
 
         def _f(x, row):
-            if row.get(param):
-                return '{} [https://next.obudget.org/i/{}]'.format(x, row[param])
-            else:
-                return x
+            # TODO: Restore link at some point?
+            # if row.get(param):
+            #     return '{} [https://next.obudget.org/i/{}]'.format(x, row[param])
+            # else:
+            return x
         return _f
     elif mod.startswith('search_term('):
-        param = mod.split('(')[1][:-1]
+        # param = mod.split('(')[1][:-1]
 
         def _f(x, row):
-            if row.get(param):
-                return '{} [https://next.obudget.org/s/?q={}]'.format(x, row[param])
-            else:
-                return x
+            # TODO: Restore link at some point?
+            # if row.get(param):
+            #     return '{} [https://next.obudget.org/s/?q={}]'.format(x, row[param])
+            # else:
+            return x
         return _f
 
 
