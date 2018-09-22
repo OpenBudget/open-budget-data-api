@@ -65,7 +65,10 @@ def download():
                 for i, row in enumerate(results):
                     for j, v in enumerate(row):
                         if v is not None:
-                            worksheet.write(i, j, str(v))
+                            try:
+                                worksheet.write_number(i, j, float(v))
+                            except ValueError:
+                                worksheet.write(i, j, str(v))
             finally:
                 workbook.close()
             return send_file(out.name, mimetype=mime, as_attachment=True, attachment_filename='budgetkey.xlsx')
