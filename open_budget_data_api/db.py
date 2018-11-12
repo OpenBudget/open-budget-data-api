@@ -43,6 +43,10 @@ def formatter(mod): #noqa
                 x = x[2:]
             return code[1:]
         return _f
+    elif mod == 'yesno':
+        def _f(x, row):
+            return 'כן' if x else 'לא'
+        return _f
     elif mod.startswith('item_link('):
         # param = mod.split('(')[1][:-1]
 
