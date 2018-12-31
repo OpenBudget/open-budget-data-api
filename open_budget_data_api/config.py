@@ -11,6 +11,6 @@ RESTPLUS_MASK_SWAGGER = False
 RESTPLUS_ERROR_404_HELP = False
 
 # SQLAlchemy settings
-SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://redash_reader:kaedusha@data.obudget.org:5432/obudget'
+SQLALCHEMY_DATABASE_URI = 'postgresql://readonly:readonly@data-next.obudget.org:5432/budgetkey'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = True  # Do not use debug mode in production
