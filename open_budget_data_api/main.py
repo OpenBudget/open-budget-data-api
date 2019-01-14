@@ -1,6 +1,7 @@
 import csv
 import logging.config
 import tempfile
+import urllib
 
 import xlsxwriter
 
@@ -32,7 +33,9 @@ def query():
 @app.route('/api/download') # noqa
 def download():
     format = request.values.get('format', 'csv')
+    file_name = request.values.get('filename')
     formatters = request.values.get('headers').split(';')
+
     results = query_db_streaming(request.values.get('query'), formatters)
     if format not in ('csv', 'xlsx'):
         abort(400)
@@ -53,8 +56,14 @@ def download():
                 buffer.seek(0)
                 yield ret
 
-        headers = {'Content-Type': mime,
-                   'Content-Disposition': 'attachment; filename=budgetkey.csv'}
+        # Encode the filename in utf-8 and url encoding
+        file_name_utf8_encoded = file_name.encode('utf-8')
+        file_name_url_encoded = urllib.parse.quote(file_name_utf8_encoded)
+
+        headers = {
+            'Content-Type': mime,
+            'Content-Disposition': 'attachment; filename=' + file_name_url_encoded + '.csv'
+        }
         return Response(generate(),
                         content_type='text/csv', headers=headers)
     if format == 'xlsx':
@@ -71,7 +80,7 @@ def download():
                                 worksheet.write(i, j, str(v))
             finally:
                 workbook.close()
-            return send_file(out.name, mimetype=mime, as_attachment=True, attachment_filename='budgetkey.xlsx')
+            return send_file(out.name, mimetype=mime, as_attachment=True, attachment_filename=file_name + '.xlsx')
 
 
 initialize_app(app)
