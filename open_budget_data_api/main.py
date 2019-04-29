@@ -33,7 +33,12 @@ def query():
 @app.route('/api/download') # noqa
 def download():
     format = request.values.get('format', 'csv')
+
     file_name = request.values.get('filename')
+    # Create a default value here in case this parameter is not provided
+    if file_name is None:
+        file_name = 'budgetkey'
+
     formatters = request.values.get('headers').split(';')
 
     results = query_db_streaming(request.values.get('query'), formatters)
