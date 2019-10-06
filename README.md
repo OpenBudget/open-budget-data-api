@@ -27,12 +27,12 @@ Instead of setting up the database locally, you can use a different database hos
 ```
 export DATABASE_URL=<db_url>
 ```
-Check the current hosted database url (SQLALCHEMY_DATABASE_URI in the config.py)
+Check the current hosted database url 
 At the time of writing it was `postgresql://readonly:readonly@data-next.obudget.org:5432/budgetkey`
 
-Start app through unicorn
+Start app through ./start_server.sh
 ```
-gunicorn open_budget_data_api.main:app
+./start_server.sh
 ```
 
 Now you can browse to the app, for example:
