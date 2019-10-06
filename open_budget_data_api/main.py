@@ -2,7 +2,7 @@ import csv
 import logging.config
 import tempfile
 import urllib
-
+import os
 import xlsxwriter
 
 from io import StringIO
@@ -16,6 +16,8 @@ app = Flask(__name__)
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+MAX_ROWS = int(os.environ.get('MAX_ROWS', 100))
+
 
 def initialize_app(flask_app):
     CORS(flask_app)
@@ -26,7 +28,9 @@ def initialize_app(flask_app):
 
 @app.route('/api/query')
 def query():
-    results = query_db(request.values.get('query'))
+    num_rows = int(request.values.get('num_rows', MAX_ROWS))
+    num_rows = min(num_rows, MAX_ROWS)
+    results = query_db(request.values.get('query'), max_rows=num_rows)
     return jsonpify(results)
 
 

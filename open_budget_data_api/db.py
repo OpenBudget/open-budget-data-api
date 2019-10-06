@@ -131,17 +131,17 @@ def query_db_streaming(query_str, formatters):
         raise
 
 
-def query_db(query_str):
+def query_db(query_str, max_rows=100):
     try:
         with engine.connect() as connection:
-            query = "select * from (%s) s limit 100" % query_str
+            query = "select * from (%s) s limit %s" % (query_str, max_rows)
             count_query = "select count(1) from (%s) s" % query_str
             log.info('executing %r', count_query)
             count = connection.execute(count_query).fetchone()[0]
             log.info('count %r', count)
             log.info('executing %r', query)
             result = connection.execute(query)
-            rows = list(map(dict, islice(iter(result), 0, 1000)))
+            rows = list(map(dict, islice(iter(result), 0, max_rows)))
             rows = [jsonable(row) for row in rows]
             log.info('rowcount %r', len(rows))
     except Exception:
