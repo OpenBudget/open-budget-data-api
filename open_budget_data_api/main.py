@@ -25,6 +25,7 @@ def initialize_app(flask_app):
     gunicorn_error_logger = logging.getLogger('gunicorn.error')
     flask_app.logger.handlers.extend(gunicorn_error_logger.handlers)
 
+
 def detect_bot():
     if request.user_agent.browser in ('google', 'aol', 'baidu', 'bing', 'yahoo'):
         log.info('Bot detected %s: %s', request.user_agent.string, request.user_agent.browser)
@@ -33,6 +34,7 @@ def detect_bot():
     else:
         return False
     return True
+
 
 @app.route('/api/query')
 def query():
