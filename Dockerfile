@@ -6,7 +6,7 @@ ENV GUNICORN_CALLABLE=app
 ENV GUNICORN_USER=gunicorn
 ENV APP_PATH=/opt/app
 
-RUN apk add --update --virtual=build-dependencies wget ca-certificates python3-dev postgresql-dev build-base
+RUN apk add --update --virtual=build-dependencies wget ca-certificates python3-dev postgresql-dev build-base libffi-dev
 RUN apk add --update libpq
 RUN python3 --version
 
