@@ -28,9 +28,15 @@ def initialize_app(flask_app):
 
 @app.route('/api/query')
 def query():
-    num_rows = int(request.values.get('num_rows', MAX_ROWS))
-    num_rows = min(num_rows, MAX_ROWS)
-    results = query_db(request.values.get('query'), max_rows=num_rows)
+    results = dict(total=0, rows=[])
+    if request.user_agent.browser in ('google', 'aol', 'baidu', 'bing', 'yahoo'):
+        log.info('Bot detected %s: %s', request.user_agent.string, request.user_agent.browser)
+    elif any(x in request.user_agent.string.lower() for x in ('applebot', 'yandexbot')):
+        log.info('Bot detected %s: %s', request.user_agent.string, request.user_agent.browser)
+    else:
+        num_rows = int(request.values.get('num_rows', MAX_ROWS))
+        num_rows = min(num_rows, MAX_ROWS)
+        results = query_db(request.values.get('query'), max_rows=num_rows)
     return jsonpify(results)
 
 
