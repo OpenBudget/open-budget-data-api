@@ -25,15 +25,19 @@ def initialize_app(flask_app):
     gunicorn_error_logger = logging.getLogger('gunicorn.error')
     flask_app.logger.handlers.extend(gunicorn_error_logger.handlers)
 
-
-@app.route('/api/query')
-def query():
-    results = dict(total=0, rows=[])
+def detect_bot():
     if request.user_agent.browser in ('google', 'aol', 'baidu', 'bing', 'yahoo'):
         log.info('Bot detected %s: %s', request.user_agent.string, request.user_agent.browser)
     elif any(x in request.user_agent.string.lower() for x in ('applebot', 'yandexbot')):
         log.info('Bot detected %s: %s', request.user_agent.string, request.user_agent.browser)
     else:
+        return False
+    return True
+
+@app.route('/api/query')
+def query():
+    results = dict(total=0, rows=[])
+    if not detect_bot():
         num_rows = int(request.values.get('num_rows', MAX_ROWS))
         num_rows = min(num_rows, MAX_ROWS)
         results = query_db(request.values.get('query'), max_rows=num_rows)
@@ -51,13 +55,22 @@ def download():
 
     formatters = request.values.get('headers').split(';')
 
-    results = query_db_streaming(request.values.get('query'), formatters)
     if format not in ('csv', 'xlsx'):
         abort(400)
+
+    if detect_bot():
+        headers = {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename=bot-detected.csv'
+        }
+        return Response('',
+                        content_type='text/csv', headers=headers)
+
     mime = {
         'csv': 'text/csv',
         'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     }[format]
+    results = query_db_streaming(request.values.get('query'), formatters)
 
     if format == 'csv':
         def generate():
