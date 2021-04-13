@@ -144,9 +144,13 @@ def query_db(query_str, max_rows=100):
             rows = list(map(dict, islice(iter(result), 0, max_rows)))
             rows = [jsonable(row) for row in rows]
             log.info('rowcount %r', len(rows))
-    except Exception:
-        log.exception('EXC')
-        raise
-    return {'total': count,
-            'rows': rows,
-            }
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e)
+        }
+    return {
+        'success': True,
+        'total': count,
+        'rows': rows,
+    }
