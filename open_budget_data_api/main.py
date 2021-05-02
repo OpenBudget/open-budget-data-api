@@ -4,6 +4,7 @@ import tempfile
 import urllib
 import os
 import xlsxwriter
+import codecs 
 
 from io import StringIO
 from flask import Flask, request, abort, Response, send_file
@@ -42,7 +43,12 @@ def query():
     if not detect_bot():
         num_rows = int(request.values.get('num_rows', MAX_ROWS))
         num_rows = min(num_rows, MAX_ROWS)
-        results = query_db(request.values.get('query'), max_rows=num_rows)
+        sql = request.values.get('query')
+        try:
+            sql = codecs.decode(sql.encode('ascii'), 'base64').decode('utf8')
+        except:
+            pass
+        results = query_db(sql, max_rows=num_rows)
     return jsonpify(results)
 
 
