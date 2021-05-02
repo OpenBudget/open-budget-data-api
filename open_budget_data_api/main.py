@@ -4,7 +4,7 @@ import tempfile
 import urllib
 import os
 import xlsxwriter
-import codecs 
+import codecs
 
 from io import StringIO
 from flask import Flask, request, abort, Response, send_file
@@ -46,7 +46,7 @@ def query():
         sql = request.values.get('query')
         try:
             sql = codecs.decode(sql.encode('ascii'), 'base64').decode('utf8')
-        except:
+        except Exception:
             pass
         results = query_db(sql, max_rows=num_rows)
     return jsonpify(results)
