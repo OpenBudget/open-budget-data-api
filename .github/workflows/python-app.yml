@@ -29,6 +29,8 @@ jobs:
         ./ci.sh install
         ./ci.sh script
     - name: Test
+      env:
+        GITHUB_TOKEN: ${{ secrets.K8S_GITHUB_TOKEN }}
       run: |
         make install
         pip install coveralls
