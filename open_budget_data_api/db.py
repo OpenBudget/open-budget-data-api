@@ -47,6 +47,11 @@ def formatter(mod): #noqa
         def _f(x, row):
             return 'כן' if x else 'לא'
         return _f
+    elif mod == 'comma-separated':
+        def _f(x, row):
+            if x and isinstance(x, list):
+                return ','.join(x)
+        return _f
     elif mod.startswith('item_link('):
         # param = mod.split('(')[1][:-1]
 
