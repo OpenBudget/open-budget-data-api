@@ -95,7 +95,7 @@ def wrapper(f):
     return _f
 
 
-PARAM = re.compile(':([a-z()_]+)$')
+PARAM = re.compile(':([-a-z()_]+)$')
 
 
 def parse_formatters(formatters):
