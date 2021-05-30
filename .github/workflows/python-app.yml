@@ -29,13 +29,9 @@ jobs:
         ./ci.sh install
         ./ci.sh script
     - name: Test
-      env:
-        GITHUB_TOKEN: ${{ secrets.K8S_GITHUB_TOKEN }}
       run: |
         make install
-        pip install coveralls
         make test
-        coveralls
     - name: Deploy
       env:
         TRAVIS_CI_OPERATOR: "1"
