@@ -13,7 +13,7 @@ RUN python3 --version
 
 # Install dependencies and create runtime user.
 RUN pip3 install --upgrade pip gunicorn[gevent] \
-    && adduser -D -h $APP_PATH $GUNICORN_USER
+    && adduser --disabled-password --home $APP_PATH $GUNICORN_USER
 
 ADD . $APP_PATH
 
