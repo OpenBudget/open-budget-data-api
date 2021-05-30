@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.7-slim
 
 ENV GUNICORN_PORT=8000
 ENV GUNICORN_MODULE=open_budget_data_api.main
@@ -6,8 +6,9 @@ ENV GUNICORN_CALLABLE=app
 ENV GUNICORN_USER=gunicorn
 ENV APP_PATH=/opt/app
 
-RUN apk add --update --virtual=build-dependencies wget ca-certificates python3-dev postgresql-dev build-base libffi-dev
-RUN apk add --update libpq
+# RUN apk add --update --virtual=build-dependencies wget ca-certificates python3-dev postgresql-dev build-base libffi-dev
+# RUN apk add --update libpq
+RUN apt-get update && apt-get install --no-install-recommends -y libpq-dev update-ca-certificates
 RUN python3 --version
 
 # Install dependencies and create runtime user.
@@ -19,8 +20,8 @@ ADD . $APP_PATH
 RUN cd $APP_PATH \
     && ls -la  \
     && pip3 install -r requirements.txt
-RUN apk del build-dependencies \
-    && rm -rf /var/cache/apk/*
+# RUN apk del build-dependencies \
+#     && rm -rf /var/cache/apk/*
 
 USER $GUNICORN_USER
 
