@@ -8,7 +8,7 @@ ENV APP_PATH=/opt/app
 
 # RUN apk add --update --virtual=build-dependencies wget ca-certificates python3-dev postgresql-dev build-base libffi-dev
 # RUN apk add --update libpq
-RUN apt-get update && apt-get install --no-install-recommends -y libpq-dev update-ca-certificates
+RUN apt-get update && apt-get install --no-install-recommends -y libpq-dev && update-ca-certificates
 RUN python3 --version
 
 # Install dependencies and create runtime user.
