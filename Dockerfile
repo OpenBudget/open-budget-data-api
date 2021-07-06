@@ -9,7 +9,6 @@ ENV APP_PATH=/opt/app
 # RUN apk add --update --virtual=build-dependencies wget ca-certificates python3-dev postgresql-dev build-base libffi-dev
 # RUN apk add --update libpq
 RUN apt-get update && apt-get install --no-install-recommends -y libpq-dev && update-ca-certificates
-RUN python3 --version
 
 # Install dependencies and create runtime user.
 RUN pip3 install --upgrade pip gunicorn[gevent] \
@@ -18,10 +17,7 @@ RUN pip3 install --upgrade pip gunicorn[gevent] \
 ADD . $APP_PATH
 
 RUN cd $APP_PATH \
-    && ls -la  \
     && pip3 install -r requirements.txt
-# RUN apk del build-dependencies \
-#     && rm -rf /var/cache/apk/*
 
 USER $GUNICORN_USER
 
