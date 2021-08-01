@@ -9,7 +9,7 @@ app = Flask(__name__)
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
-MAX_ROWS = int(os.environ.get('MAX_ROWS', 100))
+MAX_ROWS = int(os.environ.get('MAX_ROWS', 1000))
 
 app.register_blueprint(
     apisql_blueprint(connection_string=os.environ['DATABASE_URL'], max_rows=MAX_ROWS, debug=False),
