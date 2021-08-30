@@ -23,4 +23,4 @@ USER $GUNICORN_USER
 
 EXPOSE 8000
 
-CMD cd $APP_PATH && gunicorn -t 120 --bind 0.0.0.0:$GUNICORN_PORT -k gevent -w 8 --log-level debug --access-logfile - $GUNICORN_MODULE:$GUNICORN_CALLABLE
+CMD cd $APP_PATH && gunicorn -t 120 --bind 0.0.0.0:$GUNICORN_PORT -k gevent -w 8 --limit-request-line 0 --log-level debug --access-logfile - $GUNICORN_MODULE:$GUNICORN_CALLABLE
