@@ -16,3 +16,8 @@ app.register_blueprint(
     url_prefix='/api/'
 )
 CORS(app)
+
+@app.after_request
+def add_header(response):
+    response.cache_control.max_age = 3600
+    return response
