@@ -1,4 +1,4 @@
-FROM python:3.7-slim
+FROM python:3.10-slim
 
 ENV GUNICORN_PORT=8000
 ENV GUNICORN_MODULE=open_budget_data_api.main
